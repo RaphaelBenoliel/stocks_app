@@ -392,7 +392,7 @@
 .tradingview-widget-container {
   position: relative;
   background-color: #141414 !important;
-  border-radius: 16px !important;
+  border-radius: 8px !important;
   overflow: hidden !important;
 }
 
@@ -452,7 +452,7 @@
 
 .custom-chart.tradingview-widget-container iframe {
   border: 1px solid #30333A;
-  border-radius: 16px !important;
+  border-radius: 8px !important;
   overflow: hidden !important;
 }
 
