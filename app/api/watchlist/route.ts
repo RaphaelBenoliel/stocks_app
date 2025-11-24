@@ -10,19 +10,19 @@ export async function POST(request: Request) {
     if (!symbol || !company) return NextResponse.json({ success: false, message: 'Missing symbol or company' }, { status: 400 });
 
     // authenticate
-    const session = await auth.api.getSession({ headers: request.headers as any });
+    const session = await auth.api.getSession({ headers: request.headers });
     if (!session?.user) return NextResponse.json({ success: false, message: 'Not authenticated' }, { status: 401 });
 
-    const mongoose = await connectToDatabase();
+    await connectToDatabase();
 
     const userId = session.user.id || String(session.user?.id || '');
     const payload = { userId: String(userId), symbol: String(symbol).toUpperCase(), company: String(company) };
 
     try {
       await Watchlist.create({ ...payload, addedAt: new Date() });
-    } catch (err: any) {
+    } catch (err: unknown) {
       // ignore duplicate key (already in watchlist)
-      if (err?.code === 11000) {
+      if (typeof err === "object" && err !== null && "code" in err && (err as { code?: number }).code === 11000) {
         return NextResponse.json({ success: true, message: 'Already in watchlist' });
       }
       console.error('watchlist add error', err);
@@ -42,10 +42,11 @@ export async function DELETE(request: Request) {
     const { symbol } = body || {};
     if (!symbol) return NextResponse.json({ success: false, message: 'Missing symbol' }, { status: 400 });
 
-    const session = await auth.api.getSession({ headers: request.headers as any });
+    const session = await auth.api.getSession({ headers: request.headers });
     if (!session?.user) return NextResponse.json({ success: false, message: 'Not authenticated' }, { status: 401 });
 
     const userId = session.user.id || String(session.user?.id || '');
+    await connectToDatabase();
 
     await Watchlist.deleteOne({ userId: String(userId), symbol: String(symbol).toUpperCase() });
 
@@ -62,12 +63,14 @@ export async function PATCH(request: Request) {
     const { symbol, company, category } = body || {};
     if (!symbol) return NextResponse.json({ success: false, message: 'Missing symbol' }, { status: 400 });
 
-    const session = await auth.api.getSession({ headers: request.headers as any });
+    const session = await auth.api.getSession({ headers: request.headers });
     if (!session?.user) return NextResponse.json({ success: false, message: 'Not authenticated' }, { status: 401 });
 
     const userId = session.user.id || String(session.user?.id || '');
 
-    const update: any = {};
+    await connectToDatabase();
+
+    const update: Record<string, string> = {};
     if (company) update.company = String(company);
     if (category !== undefined) update.category = category === null ? '' : String(category);
 
