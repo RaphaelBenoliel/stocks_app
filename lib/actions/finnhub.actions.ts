@@ -28,7 +28,20 @@ export async function getNews(symbols?: string[]): Promise<MarketNewsArticle[]> 
     const range = getDateRange(5);
     const token = process.env.FINNHUB_API_KEY ?? NEXT_PUBLIC_FINNHUB_API_KEY;
     if (!token) {
-      throw new Error('FINNHUB API key is not configured');
+      console.error('FINNHUB API key is not configured');
+      // Provide a small fallback so the page still works locally
+      return [
+        {
+          id: 1,
+          headline: 'Set your FINNHUB_API_KEY to see live news',
+          summary: 'Add FINNHUB_API_KEY to .env and restart the dev server to fetch real market headlines.',
+          source: 'Signalist',
+          url: 'https://finnhub.io/',
+          datetime: Date.now() / 1000,
+          category: 'general',
+          related: 'MARKET',
+        },
+      ];
     }
     const cleanSymbols = (symbols || [])
       .map((s) => s?.trim().toUpperCase())
@@ -95,7 +108,18 @@ export async function getNews(symbols?: string[]): Promise<MarketNewsArticle[]> 
     return formatted;
   } catch (err) {
     console.error('getNews error:', err);
-    throw new Error('Failed to fetch news');
+    return [
+      {
+        id: 2,
+        headline: 'News temporarily unavailable',
+        summary: 'We could not load market headlines right now. Please try again in a moment.',
+        source: 'Signalist',
+        url: '#',
+        datetime: Date.now() / 1000,
+        category: 'general',
+        related: 'MARKET',
+      },
+    ];
   }
 }
 
