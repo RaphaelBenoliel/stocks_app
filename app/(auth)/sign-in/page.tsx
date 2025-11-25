@@ -4,9 +4,7 @@ import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import InputField from '@/components/forms/InputField';
 import FooterLink from '@/components/forms/FooterLink';
-import {signInWithEmail} from "@/lib/actions/auth.actions";
 import {toast} from "sonner";
-// import {signInEmail} from "better-auth/api";
 import {useRouter} from "next/navigation";
 
 type SignInFormData = {
@@ -30,8 +28,19 @@ const SignIn = () => {
 
     const onSubmit = async (data: SignInFormData) => {
         try {
-            const result = await signInWithEmail(data);
-            if(result.success) router.push('/');
+            const response = await fetch('/api/auth/sign-in', {
+                method: 'POST',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+            });
+
+            const json = await response.json().catch(() => ({}));
+            if (!response.ok || json?.success === false) {
+                throw new Error(json?.message || 'Failed to sign in.');
+            }
+
+            router.push('/');
         } catch (e) {
             console.error(e);
             toast.error('Sign in failed', {
