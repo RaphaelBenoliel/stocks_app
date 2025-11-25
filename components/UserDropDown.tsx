@@ -13,13 +13,19 @@ import {useRouter} from "next/navigation";
 import {Button} from "@/components/ui/button";
 import {LogOut} from "lucide-react";
 import NavItems from "@/components/NavItems";
-import {signOut} from "@/lib/actions/auth.actions";
 
 const UserDropdown = ({ user, initialStocks }: {user: User, initialStocks: StockWithWatchlistStatus[]}) => {
     const router = useRouter();
 
     const handleSignOut = async () => {
-        await signOut();
+        const response = await fetch('/api/auth/sign-out', { method: 'POST', credentials: 'include' });
+        const json = await response.json().catch(() => ({}));
+
+        if (!response.ok || json?.success === false) {
+            console.error('Sign out failed', json?.message);
+            return;
+        }
+
         router.push("/sign-in");
     }
 
