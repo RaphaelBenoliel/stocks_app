@@ -5,14 +5,13 @@ import { CommandDialog, CommandEmpty, CommandInput, CommandList } from "@/compon
 import {Button} from "@/components/ui/button";
 import {Loader2,  TrendingUp} from "lucide-react";
 import Link from "next/link";
-import {searchStocks} from "@/lib/actions/finnhub.actions";
 import {useDebounce} from "@/hooks/useDebounce";
 
 export default function SearchCommand({ renderAs = 'button', label = 'Add stock', initialStocks }: SearchCommandProps) {
   const [open, setOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
   const [loading, setLoading] = useState(false)
-  const [stocks, setStocks] = useState<StockWithWatchlistStatus[]>(initialStocks);
+  const [stocks, setStocks] = useState<StockWithWatchlistStatus[]>(initialStocks || []);
 
   const isSearchMode = !!searchTerm.trim();
   const displayStocks = isSearchMode ? stocks : stocks?.slice(0, 10);
@@ -29,16 +28,27 @@ export default function SearchCommand({ renderAs = 'button', label = 'Add stock'
   }, [])
 
   const handleSearch = async () => {
-    if(!isSearchMode) return setStocks(initialStocks);
+    if (!isSearchMode) {
+      setStocks(initialStocks || []);
+      return;
+    }
 
-    setLoading(true)
+    setLoading(true);
     try {
-        const results = await searchStocks(searchTerm.trim());
-        setStocks(results);
+      const query = encodeURIComponent(searchTerm.trim());
+      const response = await fetch(`/api/stocks/search?q=${query}`);
+      const json = await response.json().catch(() => ({}));
+
+      if (!response.ok || json?.success === false) {
+        setStocks([]);
+        return;
+      }
+
+      setStocks(Array.isArray(json?.data) ? json.data : []);
     } catch {
-      setStocks([])
+      setStocks([]);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
@@ -46,7 +56,7 @@ export default function SearchCommand({ renderAs = 'button', label = 'Add stock'
 
   useEffect(() => {
     debouncedSearch();
-  }, [searchTerm]);
+  }, [debouncedSearch, searchTerm, isSearchMode, initialStocks]);
 
   const handleSelectStock = () => {
     setOpen(false);
@@ -83,7 +93,7 @@ export default function SearchCommand({ renderAs = 'button', label = 'Add stock'
                 {isSearchMode ? 'Search results' : 'Popular stocks'}
                 {` `}({displayStocks?.length || 0})
               </div>
-              {displayStocks?.map((stock, i) => (
+              {displayStocks?.map((stock) => (
                   <li key={stock.symbol} className="search-item">
                     <Link
                         href={`/stocks/${stock.symbol}`}
