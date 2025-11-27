@@ -11,10 +11,8 @@ Realtime dashboards, AI briefings, and automated alerts that keep you ahead of t
 - Optional email + Inngest jobs for personalized welcomes and daily news briefings.
 /Users/raphaelbenoliel/Documents/repos/WebDev/stocks_app/
 ## Screenshots
-- Dashboard: `public/assets/dashboard.png`
-- Watchlist: `docs/screenshots/watchlist.png`
-- Alerts: `docs/screenshots/alerts.png`
-- News + AI summary: `docs/screenshots/news.png`
+![Dashboard](stocks_app/public/assets/dashboard.png)
+
 
 ## Stack
 - App: Next.js 15 (App Router, Turbopack), React 19, Tailwind CSS 4.
