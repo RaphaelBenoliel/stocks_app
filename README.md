@@ -10,9 +10,10 @@ Realtime dashboards, AI briefings, and automated alerts that keep you ahead of t
 - Auth flows (sign in/up/out) backed by better-auth middleware; gated app routes under `app/(root)`.
 - Optional email + Inngest jobs for personalized welcomes and daily news briefings.
 /Users/raphaelbenoliel/Documents/repos/WebDev/stocks_app/
-## Screenshots
-![Dashboard](stocks_app/public/assets/dashboard.png)
 
+## Screenshots
+- **Dashboard**:
+![Dashboard](public/assets/dashboard.png)
 
 ## Stack
 - App: Next.js 15 (App Router, Turbopack), React 19, Tailwind CSS 4.
