@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import WatchlistButton from "@/components/WatchlistButton";
 
@@ -52,7 +52,7 @@ export default function WatchlistTable({ watchlist }: { watchlist: ClientStock[]
 
   // Abort+debounce per symbol
   const inflight = useRef<Record<string, AbortController>>({});
-  const timers = useRef<Record<string, any>>({});
+  const timers = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
 
   // ----- helpers -----
   const setSavingFor = (symbol: string, v: boolean) =>
