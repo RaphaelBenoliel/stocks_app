@@ -1,4 +1,4 @@
-# Signalist — Market OS for Human Investors 🚀
+# Signalist — Market dashboards for Investors 🚀
 Realtime dashboards, AI briefings, and automated alerts that keep you ahead of the tape.
 
 ## Highlights
