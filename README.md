@@ -2,7 +2,7 @@
 Realtime dashboards, AI briefings, and automated alerts that keep you ahead of the tape.
 
 ## Highlights
-- Live market cockpit: TradingView embeds for overview, heatmaps, timelines, and quotes in one grid (`app/(root)/page.tsx`).
+- **Live market cockpit:** TradingView embeds for overview, heatmaps, timelines, and quotes in one grid (`app/(root)/page.tsx`).
 - Command palette search (⌘/Ctrl + K) that queries Finnhub and deep-links to `/stocks/[symbol]`.
 - Watchlist with Mongo persistence, inline edits, and AI “watchlist pulse” summaries.
 - Price alerts per symbol (upper/lower triggers) with current price context from Finnhub.
@@ -16,12 +16,12 @@ Realtime dashboards, AI briefings, and automated alerts that keep you ahead of t
 ![Dashboard](public/assets/dashboard.png)
 
 ## Stack
-- App: Next.js 15 (App Router, Turbopack), React 19, Tailwind CSS 4.
-- Auth: better-auth with secure cookies and middleware guard (`middleware/index.ts`).
-- Data: MongoDB via Mongoose models (`db/models/*.ts`) for watchlists and alerts.
-- Market data: Finnhub (quotes, profiles, news) + TradingView embeds for charts.
-- AI: Gemini (Google Generative Language API) for watchlist insights and news digests.
-- Email & jobs: Nodemailer templates (`lib/nodemailer`) and Inngest functions (`lib/inngest/functions.ts`) for welcome/news emails.
+- **App:** Next.js 15 (App Router, Turbopack), React 19, Tailwind CSS 4.
+- **Auth:** better-auth with secure cookies and middleware guard (`middleware/index.ts`).
+- **Data:** MongoDB via Mongoose models (`db/models/*.ts`) for watchlists and alerts.
+- **Market data:** Finnhub (quotes, profiles, news) + TradingView embeds for charts.
+- **AI:** Gemini (Google Generative Language API) for watchlist insights and news digests.
+- **Email & jobs:** Nodemailer templates (`lib/nodemailer`) and Inngest functions (`lib/inngest/functions.ts`) for welcome/news emails.
 
 ## Quickstart
 1) Install dependencies
